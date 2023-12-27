@@ -55,7 +55,7 @@ class _UpdateContatctState extends State<UpdateContact> {
   String? _validateMobileNumber(String value) {
     // Validate that the mobile number has exactly 10 digits
     if (value.length != 10) {
-      return 'Mobile number must have exactly 10 digits';
+      return 'Mobile number must have been 10 digits';
     }
     return null; // Return null if validation passes
   }
