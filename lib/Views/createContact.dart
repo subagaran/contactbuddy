@@ -1,5 +1,6 @@
 import 'package:contactbuddy/Helper/DatabaseHelper.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class CreateContact extends StatefulWidget {
   const CreateContact({super.key});
@@ -38,22 +39,20 @@ class _CreateContactState extends State<CreateContact> {
 
   List<Map<String, dynamic>> dataList = [];
 
-
   String? _validateMobileNumber(String value) {
     // Validate that the mobile number has exactly 10 digits
     if (value.length != 10) {
-      return 'Mobile number must have exactly 10 digits';
+      return 'Mobile number must have be 10 digits';
     }
     return null; // Return null if validation passes
   }
-
 
   void _saveData() async {
     final name = _nameController.text;
     final telephoneNo = _telephoneNoController.text;
     final email = _emailController.text;
 
-    String? mobileNumberValidation = _validateMobileNumber(telephoneNo);
+    String? mobileNumberValidation = _validateMobileNumber(_telephoneNoController.text);
     if (mobileNumberValidation != null) {
 
       ScaffoldMessenger.of(context).showSnackBar(
@@ -128,6 +127,10 @@ class _CreateContactState extends State<CreateContact> {
                   TextFormField(
                     controller: _telephoneNoController,
                     keyboardType: TextInputType.phone,
+                    maxLength: 10,
+                    inputFormatters: <TextInputFormatter>[
+                      FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                    ],
                     decoration:
                         const InputDecoration(hintText: 'Mobile Number'),
                   ),

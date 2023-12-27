@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../Helper/DatabaseHelper.dart';
 
@@ -55,7 +56,7 @@ class _UpdateContatctState extends State<UpdateContact> {
   String? _validateMobileNumber(String value) {
     // Validate that the mobile number has exactly 10 digits
     if (value.length != 10) {
-      return 'Mobile number must have been 10 digits';
+      return 'Mobile number must have be 10 digits';
     }
     return null; // Return null if validation passes
   }
@@ -115,6 +116,11 @@ class _UpdateContatctState extends State<UpdateContact> {
             ),
             TextFormField(
               controller: _telephoneNoController,
+              keyboardType: TextInputType.phone,
+              maxLength: 10,
+              inputFormatters: <TextInputFormatter>[
+                FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+              ],
               decoration: const InputDecoration(hintText: 'Mobile No'),
             ),
             TextFormField(

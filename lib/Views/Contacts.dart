@@ -3,6 +3,8 @@ import 'package:contactbuddy/Views/createContact.dart';
 import 'package:contactbuddy/Views/update_contatct.dart';
 import 'package:flutter/material.dart';
 
+import 'contact_details.dart';
+
 class Contacts extends StatefulWidget {
   const Contacts({super.key});
 
@@ -169,6 +171,15 @@ class _ContactsState extends State<Contacts> {
                             Text('${dataList[index]['TelephoneNo']}')
                           ],
                         ),
+                        onTap: () {
+                          // Navigate to the details page when a contact is tapped
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ContactDetails(contactDetails: dataList[index], contactId: index,),
+                            ),
+                          );
+                        },
                         trailing: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
