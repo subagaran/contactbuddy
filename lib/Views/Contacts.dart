@@ -158,7 +158,17 @@ class _ContactsState extends State<Contacts> {
                 height: 30,
               ),
               Expanded(
-                  child: ListView.builder(
+                child: dataList.isEmpty
+                    ? Center(
+                  child: Text(
+                    'No contacts found.',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
+                  ),
+                )
+                  : ListView.builder(
                     itemCount: dataList.length,
                     itemBuilder: (context, index) {
                       return ListTile(

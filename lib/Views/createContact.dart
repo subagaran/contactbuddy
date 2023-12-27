@@ -46,13 +46,33 @@ class _CreateContactState extends State<CreateContact> {
     }
     return null; // Return null if validation passes
   }
+  String? _validateName(String value) {
+    // Validate that the mobile number has exactly 10 digits
+    if (value == "") {
+      return 'Name is required';
+    }
+    return null; // Return null if validation passes
+  }
 
   void _saveData() async {
     final name = _nameController.text;
     final telephoneNo = _telephoneNoController.text;
     final email = _emailController.text;
 
+    String? nameValidation = _validateName(_nameController.text);
     String? mobileNumberValidation = _validateMobileNumber(_telephoneNoController.text);
+
+    if (nameValidation != null) {
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(nameValidation),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return;
+    }
+
     if (mobileNumberValidation != null) {
 
       ScaffoldMessenger.of(context).showSnackBar(
@@ -62,8 +82,8 @@ class _CreateContactState extends State<CreateContact> {
         ),
       );
       return;
-
     }
+
 
     int insertId = await DatabaseHelper.insertContact(name, telephoneNo, email);
 

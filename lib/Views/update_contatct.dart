@@ -54,6 +54,14 @@ class _UpdateContatctState extends State<UpdateContact> {
       super.initState();
   }
 
+  String? _validateName(String value) {
+    // Validate that the mobile number has exactly 10 digits
+    if (value == "") {
+      return 'Name is required';
+    }
+    return null; // Return null if validation passes
+  }
+
   String? _validateMobileNumber(String value) {
     // Validate that the mobile number has exactly 10 digits
     if (value.length != 10) {
@@ -69,7 +77,20 @@ class _UpdateContatctState extends State<UpdateContact> {
       'Email':_emailController.text,
     };
 
+    String? nameValidation = _validateName(_nameController.text);
     String? mobileNumberValidation = _validateMobileNumber(_telephoneNoController.text);
+
+    if (nameValidation != null) {
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(nameValidation),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return;
+    }
+
     if (mobileNumberValidation != null) {
 
       ScaffoldMessenger.of(context).showSnackBar(
