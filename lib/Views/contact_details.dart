@@ -1,8 +1,5 @@
-// contact_details.dart
-import 'package:contactbuddy/Views/update_contatct.dart';
-import 'package:flutter/material.dart';
 
-import '../Helper/DatabaseHelper.dart';
+import 'package:flutter/material.dart';
 
 class ContactDetails extends StatefulWidget {
   const ContactDetails({Key? key,required this.contactId, required this.contactDetails}):super(key: key);
@@ -48,8 +45,13 @@ class _ContactDetailState extends State<ContactDetails> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text('Contact Details'),
-        backgroundColor: Colors.green,
+        titleTextStyle: TextStyle(
+            fontWeight: FontWeight.bold, // Set the font weight to bold
+            fontSize:20
+        ),
+        foregroundColor: Colors.white,
       ),
       body: Column(
         mainAxisSize: MainAxisSize.min,

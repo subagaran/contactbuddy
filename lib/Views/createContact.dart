@@ -88,13 +88,6 @@ class _CreateContactState extends State<CreateContact> {
     super.initState();
   }
 
-  void _delete(int contactId) async {
-    int id = await DatabaseHelper.deleteContact(contactId);
-    List<Map<String, dynamic>> updatedata = await DatabaseHelper.getContact();
-    setState(() {
-      dataList = updatedata;
-    });
-  }
 
   @override
   void dispose() {
@@ -112,6 +105,11 @@ class _CreateContactState extends State<CreateContact> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text('Create Contact'),
+        titleTextStyle: TextStyle(
+            fontWeight: FontWeight.bold, // Set the font weight to bold
+            fontSize: 20
+        ),
+        foregroundColor: Colors.white,
       ),
       body: Center(
         child: Padding(

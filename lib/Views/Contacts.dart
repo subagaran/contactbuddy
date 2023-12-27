@@ -67,12 +67,6 @@ class _ContactsState extends State<Contacts> {
     });
   }
 
-  Future <void> _refresh() async{
-  setState(() {
-    _fetchContacts();
-  });
-  }
-
   void _showDeleteConfirmationDialog(int contactId) {
     showDialog(
       context: context,
@@ -106,6 +100,10 @@ class _ContactsState extends State<Contacts> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text("Contacts"),
+        titleTextStyle: TextStyle(
+            fontWeight: FontWeight.bold, // Set the font weight to bold
+            fontSize:20
+        ),
       ),
 
       floatingActionButton: FloatingActionButton(

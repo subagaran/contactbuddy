@@ -19,6 +19,7 @@ class UpdateContact extends StatefulWidget {
         primarySwatch: Colors.red,
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
         useMaterial3: true,
+
       ),
       home: const MyUpdatePage(title: 'Add Contact'),
     );
@@ -105,6 +106,14 @@ class _UpdateContatctState extends State<UpdateContact> {
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
         title: Text('Update Contact'),
+
+
+        titleTextStyle: TextStyle(
+          fontWeight: FontWeight.bold, // Set the font weight to bold
+          fontSize: 20
+        ),
+        foregroundColor: Colors.white,
+
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -136,6 +145,5 @@ _updateContact(context);
         ),
       ),
     );
-    return const Placeholder();
   }
 }
