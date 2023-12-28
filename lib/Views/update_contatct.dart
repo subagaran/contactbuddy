@@ -13,7 +13,7 @@ class UpdateContact extends StatefulWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Add Contact',
+      title: 'Update Contact',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.red,
@@ -21,7 +21,7 @@ class UpdateContact extends StatefulWidget {
         useMaterial3: true,
 
       ),
-      home: const MyUpdatePage(title: 'Add Contact'),
+      home: const MyUpdatePage(title: 'Update Contact'),
     );
   }}
 

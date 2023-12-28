@@ -11,14 +11,14 @@ class ContactDetails extends StatefulWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Add Contact',
+      title: 'Update Contact',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.red,
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
         useMaterial3: true,
       ),
-      home: const ContactDetailPage(title: 'Add Contact', index: 'id',),
+      home: const ContactDetailPage(title: 'Update Contact', index: 'id',),
     );
   }
 }
