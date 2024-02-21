@@ -1,0 +1,77 @@
+public bool IsSelectedOption1
+{
+    get => _isSelectedOption1;
+    set
+    {
+        if (_isSelectedOption1 != value)
+        {
+            _isSelectedOption1 = value;
+            OnPropertyChanged();
+            UpdateSelectedOptionText();
+        }
+    }
+}
+
+public bool IsSelectedOption2
+{
+    get => _isSelectedOption2;
+    set
+    {
+        if (_isSelectedOption2 != value)
+        {
+            _isSelectedOption2 = value;
+            OnPropertyChanged();
+            UpdateSelectedOptionText();
+        }
+    }
+}
+
+[ObservableProperty]
+string selectedOptionText;
+
+[ObservableProperty]
+string selectedOptionText2;
+
+ private async void UpdateSelectedOptionText()
+ {
+    string SelectedOptionText = IsSelectedOption1 ? IsSelectedOption1.ToString() :
+                          IsSelectedOption2 ? IsSelectedOption2.ToString() :
+                                              IsSelectedOption1.ToString();
+
+     // Store the selected option value in secure storage
+     await SecureStorage.SetAsync("SelectedOption", IsSelectedOption1.ToString());
+     await SecureStorage.SetAsync("SelectedOption2", IsSelectedOption2.ToString());
+ }
+
+ public bool selectedOption1()
+ {
+     IsSelectedOption1 = true;
+     SecureStorage.SetAsync("Option1", IsSelectedOption1.ToString());
+     return true;
+ }
+
+
+ public string GetStoredOption()
+ { 
+     return SecureStorage.GetAsync("SelectedOption").GetAwaiter().GetResult();
+ }
+
+ public string GetStoredOption2()
+ {
+     return SecureStorage.GetAsync("SelectedOption2").GetAwaiter().GetResult();
+ }
+
+<RadioButton
+    Content="Option 1"
+    GroupName="Options"
+    IsChecked="{Binding IsSelectedOption1}" />
+
+<RadioButton
+    Content="Option 2"
+    GroupName="Options"
+    IsChecked="{Binding IsSelectedOption2}" />
+
+<Label Text="{Binding SelectedOptionText}" />
+<Label Text="{Binding SelectedOptionText2}" />
+
+<Button Command="{Binding SaveEmployeeCommand}" Text="Save Details" />
