@@ -1,77 +1,54 @@
-public bool IsSelectedOption1
-{
-    get => _isSelectedOption1;
-    set
-    {
-        if (_isSelectedOption1 != value)
-        {
-            _isSelectedOption1 = value;
-            OnPropertyChanged();
-            UpdateSelectedOptionText();
-        }
-    }
-}
+DECLARE @TableName NVARCHAR(255)
+DECLARE @SQL NVARCHAR(MAX)
+DECLARE @Columns NVARCHAR(MAX)
 
-public bool IsSelectedOption2
-{
-    get => _isSelectedOption2;
-    set
-    {
-        if (_isSelectedOption2 != value)
-        {
-            _isSelectedOption2 = value;
-            OnPropertyChanged();
-            UpdateSelectedOptionText();
-        }
-    }
-}
+DECLARE table_cursor CURSOR FOR
+SELECT t.name
+FROM PICKPAYDB.sys.tables t
+WHERE EXISTS (
+    SELECT 1
+    FROM PICKPAYDB2.sys.tables t2
+    WHERE t2.name = t.name
+)
 
-[ObservableProperty]
-string selectedOptionText;
+OPEN table_cursor
+FETCH NEXT FROM table_cursor INTO @TableName
 
-[ObservableProperty]
-string selectedOptionText2;
+WHILE @@FETCH_STATUS = 0
+BEGIN
+    -- Get matching column names between source and destination
+    SELECT @Columns = STRING_AGG(QUOTENAME(c.name), ', ')
+    FROM PICKPAYDB.sys.columns c
+    WHERE c.object_id = OBJECT_ID('PICKPAYDB.dbo.' + @TableName)
+      AND c.name IN (
+          SELECT c2.name
+          FROM PICKPAYDB2.sys.columns c2
+          WHERE c2.object_id = OBJECT_ID('PICKPAYDB2.dbo.' + @TableName)
+      )
 
- private async void UpdateSelectedOptionText()
- {
-    string SelectedOptionText = IsSelectedOption1 ? IsSelectedOption1.ToString() :
-                          IsSelectedOption2 ? IsSelectedOption2.ToString() :
-                                              IsSelectedOption1.ToString();
+    IF @Columns IS NOT NULL
+    BEGIN
+        SET @SQL = '
+        -- =====================================
+        -- Table: ' + @TableName + '
+        -- =====================================
+        TRUNCATE TABLE PICKPAYDB2.dbo.' + QUOTENAME(@TableName) + ';
 
-     // Store the selected option value in secure storage
-     await SecureStorage.SetAsync("SelectedOption", IsSelectedOption1.ToString());
-     await SecureStorage.SetAsync("SelectedOption2", IsSelectedOption2.ToString());
- }
+        SET IDENTITY_INSERT PICKPAYDB2.dbo.' + QUOTENAME(@TableName) + ' ON;
 
- public bool selectedOption1()
- {
-     IsSelectedOption1 = true;
-     SecureStorage.SetAsync("Option1", IsSelectedOption1.ToString());
-     return true;
- }
+        INSERT INTO PICKPAYDB2.dbo.' + QUOTENAME(@TableName) + ' (' + @Columns + ')
+        SELECT ' + @Columns + '
+        FROM PICKPAYDB.dbo.' + QUOTENAME(@TableName) + ';
 
+        SET IDENTITY_INSERT PICKPAYDB2.dbo.' + QUOTENAME(@TableName) + ' OFF;
+        '
 
- public string GetStoredOption()
- { 
-     return SecureStorage.GetAsync("SelectedOption").GetAwaiter().GetResult();
- }
+        PRINT @SQL
+        PRINT '-----------------------------------------------------------'
+    END
 
- public string GetStoredOption2()
- {
-     return SecureStorage.GetAsync("SelectedOption2").GetAwaiter().GetResult();
- }
+    FETCH NEXT FROM table_cursor INTO @TableName
+END
 
-<RadioButton
-    Content="Option 1"
-    GroupName="Options"
-    IsChecked="{Binding IsSelectedOption1}" />
-
-<RadioButton
-    Content="Option 2"
-    GroupName="Options"
-    IsChecked="{Binding IsSelectedOption2}" />
-
-<Label Text="{Binding SelectedOptionText}" />
-<Label Text="{Binding SelectedOptionText2}" />
-
-<Button Command="{Binding SaveEmployeeCommand}" Text="Save Details" />
+CLOSE table_cursor
+DEALLOCATE table_cursor
